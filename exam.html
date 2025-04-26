@@ -647,8 +647,8 @@
 
 <script>
     // Timer
-    let timeInMinutes = 45;
-    let time = timeInMinutes * 60;
+    let timeInSeconds = 2700; // Set time to 45 seconds
+    let time = timeInSeconds;
     const countdownEl = document.getElementById('time');
     
     function updateCountdown() {
@@ -697,7 +697,7 @@
         const totalQuestions = 30;
         const percentage = (score / totalQuestions) * 100;
     
-        const totalTimeUsedInSeconds = 60 * 60 - time; // assuming time is in seconds
+        const totalTimeUsedInSeconds = timeInSeconds - time; // Total time used
         const minutesTaken = Math.floor(totalTimeUsedInSeconds / 60);
         const secondsTaken = totalTimeUsedInSeconds % 60;
         const timeTaken = `${minutesTaken} min ${secondsTaken < 10 ? '0' : ''}${secondsTaken} sec`;
@@ -731,7 +731,10 @@
     // Display Score
     function displayScore(score) {
         const userName = localStorage.getItem("candidateName") || "Unknown User";
-        const timeTaken = `${Math.floor((60 - time) / 60)} min ${60 - time % 60} sec`;
+        const totalTimeUsedInSeconds = timeInSeconds - time; // Correct the time calculation
+        const minutesTaken = Math.floor(totalTimeUsedInSeconds / 60);
+        const secondsTaken = totalTimeUsedInSeconds % 60;
+        const timeTaken = `${minutesTaken} min ${secondsTaken < 10 ? '0' : ''}${secondsTaken} sec`;
     
         document.getElementById('scoreDisplay').style.display = 'block';
     
@@ -766,7 +769,7 @@
         if (scoreChartCanvas) {
             // Ensure the canvas is visible before rendering the chart
             document.getElementById('scoreDisplay').style.display = 'block';
-
+    
             const ctx = scoreChartCanvas.getContext('2d');
             scoreChartCanvas.width = 200; // Reduce width
             scoreChartCanvas.height = 200; // Reduce height
@@ -792,11 +795,11 @@
             Score: ${percentage}% - ${scoreMessage}<br>
             Time Taken: ${timeTaken}
         `;
-
+    
         // Optionally, send email via backend here
         sendEmail(userName, percentage, scoreMessage, timeTaken);
     }
-
+    
     // Function to send results to email (you need backend integration for this part)
     function sendEmail(userName, percentage, scoreMessage, timeTaken) {
         const emailData = {
@@ -821,8 +824,8 @@
         .then(data => console.log('Email sent successfully', data))
         .catch(error => console.error('Error sending email:', error));
     }
-</script>
-
+    </script>
+    
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
